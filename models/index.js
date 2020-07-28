@@ -6,7 +6,10 @@ const TaskSchema = new Schema({
     type: String,
     required: "Title is Required",
   },
-  description: String,
+  description: {
+    type: String,
+    required: "Description is Required",
+  },
   priority: {
     type: Number,
     required: "Set a priority",
