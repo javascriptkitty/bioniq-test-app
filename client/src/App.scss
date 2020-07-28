@@ -1,0 +1,50 @@
+// .MuiFab-root {
+//   position: absolute;
+//   justify-content: flex-end;
+//   right: 0;
+// }
+
+.addTask {
+  display: flex;
+  position: relative;
+
+  margin-top: 10px;
+
+  .MuiPaper-root,
+  .MuiCardContent-root {
+    display: flex;
+    padding: 15px;
+    width: 100%;
+  }
+
+  .MuiCardContent-root:last-child {
+    padding-bottom: 0;
+  }
+  .MuiFormControl-root.MuiTextField-root {
+    margin-right: 25px;
+  }
+  .MuiInput-root {
+    min-width: 65px;
+  }
+  .saveBtn {
+    min-width: 110px;
+    height: 40px;
+    align-self: center;
+  }
+  .closeBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 10px;
+    min-width: 32px !important;
+  }
+  .title {
+    width: 180px;
+  }
+  .priority {
+    width: 85px;
+  }
+  .description {
+    width: 100%;
+  }
+}

@@ -1,17 +1,20 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  IconButton,
+  TableSortLabel,
+  makeStyles,
+} from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { IconButton } from "@material-ui/core";
-import TableSortLabel from "@material-ui/core/TableSortLabel";
 import { stableSort, getComparator } from "../utils";
-const headCells = [
+
+export const headCells = [
   { id: "_id", label: "" },
   { id: "name", label: "Название" },
   { id: "description", label: "Описание" },
@@ -57,9 +60,7 @@ function MaterialTableHead(props) {
 
 MaterialTableHead.propTypes = {
   classes: PropTypes.object.isRequired,
-
   onRequestSort: PropTypes.func.isRequired,
-
   order: PropTypes.oneOf(["asc", "desc"]).isRequired,
   orderBy: PropTypes.string.isRequired,
 };
@@ -68,10 +69,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100%",
     marginTop: theme.spacing(3),
-  },
-  paper: {
-    width: "100%",
-    marginBottom: theme.spacing(2),
   },
 
   tableWrapper: {
@@ -111,7 +108,7 @@ export default function MaterialTable(props) {
   };
   return (
     <div className={classes.root}>
-      <Paper className={classes.paper}>
+      <Paper>
         <div className={classes.tableWrapper}>
           <Table stickyHeader>
             <MaterialTableHead
