@@ -11,7 +11,6 @@ module.exports = {
   findById: function (req, res) {
     Task.findOne({ _id: req.params.id })
       .then((dbModel) => {
-        console.log(dbModel);
         res.json(dbModel);
       })
       .catch((err) => res.status(422).json(err));
@@ -20,16 +19,16 @@ module.exports = {
   create: function (req, res) {
     Task.create(req.body)
       .then((dbModel) => {
-        console.log(dbModel);
         res.json(dbModel);
       })
       .catch((err) => res.status(422).json(err));
   },
-  update: function (req, res) {
-    Task.findByIdAndUpdate(req.params.id, req.body)
-      .then((dbModel) => {
-        console.log(dbModel);
-        res.json(dbModel);
+
+  removeSelected: function (req, res) {
+    Task.find()
+      .then((dbModel) => dbModel.remove())
+      .then((result) => {
+        res.json(result);
       })
       .catch((err) => res.status(422).json(err));
   },

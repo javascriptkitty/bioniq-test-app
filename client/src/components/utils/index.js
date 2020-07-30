@@ -3,8 +3,8 @@ export default function descendingComparator(a, b, orderBy) {
     return 0;
   }
 
-  const aParsed = orderBy === "name" ? parseFloat(a[orderBy]) : a[orderBy];
-  const bParsed = orderBy === "name" ? parseFloat(b[orderBy]) : b[orderBy];
+  const aParsed = orderBy === "priority" ? parseFloat(a[orderBy]) : a[orderBy];
+  const bParsed = orderBy === "priority" ? parseFloat(b[orderBy]) : b[orderBy];
   if (bParsed < aParsed) {
     return -1;
   }

@@ -10,8 +10,10 @@ import {
   IconButton,
   TableSortLabel,
   makeStyles,
+  TableContainer,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
+import TableSearch from "../TableSearch";
 import { stableSort, getComparator } from "../utils";
 
 export const headCells = [
@@ -26,6 +28,7 @@ function MaterialTableHead(props) {
   const createSortHandler = (property) => (event) => {
     onRequestSort(event, property);
   };
+
   return (
     <TableHead>
       <TableRow variant="head">
@@ -41,7 +44,7 @@ function MaterialTableHead(props) {
                 direction={orderBy === cell.id ? order : "asc"}
                 onClick={createSortHandler(cell.id)}
               >
-                {cell.label}
+                <strong>{cell.label}</strong>
                 {orderBy === cell.id ? (
                   <span className={classes.visuallyHidden}>
                     {order === "desc"
@@ -71,8 +74,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
 
-  tableWrapper: {
-    overflowX: "auto",
+  container: {
+    maxHeight: "100vh",
   },
   visuallyHidden: {
     border: 0,
@@ -86,6 +89,21 @@ const useStyles = makeStyles((theme) => ({
     width: 1,
   },
 }));
+
+function renderTableRow(row, deleteTask) {
+  return (
+    <TableRow key={row._id} hover>
+      <TableCell>
+        <IconButton onClick={deleteTask.bind(this, row._id)}>
+          <DeleteIcon />
+        </IconButton>
+      </TableCell>
+      <TableCell>{row.name}</TableCell>
+      <TableCell>{row.description}</TableCell>
+      <TableCell align="center">{row.priority}</TableCell>
+    </TableRow>
+  );
+}
 
 export default function MaterialTable(props) {
   const rows = props.tasks.map((el) => {
@@ -106,40 +124,28 @@ export default function MaterialTable(props) {
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
+
+  const sortedRows = stableSort(rows, getComparator(order, orderBy));
+
   return (
-    <div className={classes.root}>
-      <Paper>
-        <div className={classes.tableWrapper}>
-          <Table stickyHeader>
-            <MaterialTableHead
-              classes={classes}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-            />
-            <TableBody>
-              {stableSort(rows, getComparator(order, orderBy))
-                .slice()
-                .map((row) => {
-                  return (
-                    <TableRow key={row._id} hover>
-                      <TableCell>
-                        <IconButton
-                          onClick={props.deleteTask.bind(this, row._id)}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </TableCell>
-                      <TableCell>{row.name}</TableCell>
-                      <TableCell>{row.description}</TableCell>
-                      <TableCell align="center">{row.priority}</TableCell>
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </div>
-      </Paper>
-    </div>
+    <Paper className={classes.root}>
+      <TableSearch onSearch={props.searchHandler} />
+
+      <TableContainer className={classes.container}>
+        <Table stickyHeader>
+          <MaterialTableHead
+            classes={classes}
+            order={order}
+            orderBy={orderBy}
+            onRequestSort={handleRequestSort}
+          />
+          <TableBody>
+            {sortedRows.map((row) => {
+              return renderTableRow(row, props.deleteTask);
+            })}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Paper>
   );
 }
