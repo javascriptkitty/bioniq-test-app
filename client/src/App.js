@@ -5,6 +5,7 @@ import AddDelete from "./components/AddDelete";
 import { Container } from "@material-ui/core";
 import PathBuilder from "./components/utils/pathBuilder";
 import "./App.scss";
+import io from "socket.io-client";
 
 export default class App extends React.Component {
   constructor(props) {
@@ -14,6 +15,11 @@ export default class App extends React.Component {
       tasks: [],
       search: "",
     };
+
+    this.socket = io();
+    this.socket.on("task", (task) => {
+      this.setState({ tasks: [task, ...this.state.tasks] });
+    });
   }
 
   deleteTask = (id) => {
@@ -59,7 +65,7 @@ export default class App extends React.Component {
       .post(`/api/tasks`, task)
       .then((res) => {
         this.setState({
-          tasks: [...this.state.tasks, res.data],
+          // tasks: [...this.state.tasks, res.data],
           openAddTask: false,
         });
       })

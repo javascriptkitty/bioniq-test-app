@@ -1,9 +1,11 @@
 const express = require("express");
 const WebSocket = require("ws");
 const mongoose = require("mongoose");
-const routes = require("./routes");
-const app = express();
 
+const app = express();
+const http = require("http").createServer(app);
+require("./io")(http);
+const routes = require("./routes");
 const PORT = process.env.PORT || 8080;
 
 // Configure body parsing for AJAX requests
@@ -37,6 +39,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/todo-db", {
 });
 
 // Start the API server
-app.listen(PORT, () =>
+http.listen(PORT, () =>
   console.log(`🌎  ==> API Server now listening on PORT ${PORT}!`)
 );
