@@ -25,7 +25,12 @@
   label {
     white-space: nowrap;
   }
-  .saveBtn {
+  .deleteByName {
+    display: flex;
+    flex-direction: column;
+  }
+  .saveBtn,
+  .deleteBtn {
     min-width: 110px;
     height: 40px;
     align-self: center;
@@ -37,6 +42,7 @@
     border-radius: 10px;
     min-width: 32px !important;
   }
+
   .name {
     min-width: 180px;
   }
@@ -51,7 +57,7 @@
     width: 100%;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
   }
 }
 

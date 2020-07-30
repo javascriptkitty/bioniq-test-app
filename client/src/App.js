@@ -5,6 +5,8 @@ import AddDelete from "./components/AddDelete";
 import { Container } from "@material-ui/core";
 import PathBuilder from "./components/utils/pathBuilder";
 import "./App.scss";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import io from "socket.io-client";
 
 export default class App extends React.Component {
@@ -33,17 +35,16 @@ export default class App extends React.Component {
   };
 
   deleteSelected = (value) => {
-    debugger;
     let url;
     if (value === "lessThan") {
       url = new PathBuilder("/api/tasks")
         .addParam("priority", 5)
-        .addParam("op", "gt")
+        .addParam("op", "lt")
         .build();
     } else if (value === "moreThan") {
       url = new PathBuilder("/api/tasks")
         .addParam("priority", 5)
-        .addParam("op", "lt")
+        .addParam("op", "gt")
         .build();
     } else {
       url = new PathBuilder("/api/tasks")
@@ -55,7 +56,8 @@ export default class App extends React.Component {
     axios
       .delete(url)
       .then((res) => {
-        debugger;
+        console.log(res);
+        this.loadTasks();
       })
       .catch((err) => console.log(err));
   };
@@ -65,11 +67,17 @@ export default class App extends React.Component {
       .post(`/api/tasks`, task)
       .then((res) => {
         this.setState({
-          // tasks: [...this.state.tasks, res.data],
           openAddTask: false,
         });
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        if (err.response.data.name === "MongoError") {
+          toast.error(
+            `Задание '${err.response.data.keyValue.name}' уже существует`
+          );
+        }
+        console.log(err);
+      });
   };
 
   searchHandler = (search) => {
@@ -96,19 +104,27 @@ export default class App extends React.Component {
     return result;
   }
 
-  componentDidMount() {
+  loadTasks = () => {
     axios
       .get("/api/tasks?limit=20")
       .then((res) => {
         this.setState({ tasks: res.data });
       })
       .catch((err) => console.log(err));
+  };
+  componentDidMount() {
+    this.loadTasks();
   }
 
   render() {
     const filteredData = this.getFilteredData();
     return (
       <Container>
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={true}
+        />
         <AddDelete
           createTask={this.createTask}
           deleteSelected={this.deleteSelected}

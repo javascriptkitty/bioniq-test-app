@@ -21,9 +21,15 @@ export default function AddDelete(props) {
         <Card>
           <CardContent>
             {showAdd ? (
-              <AddTask createTask={props.createTask} />
+              <AddTask
+                createTask={props.createTask}
+                closeAddTask={closeAddTask}
+              />
             ) : (
-              <DeleteTask deleteSelected={props.deleteSelected} />
+              <DeleteTask
+                deleteSelected={props.deleteSelected}
+                closeAddTask={closeAddTask}
+              />
             )}
             <Button className="closeBtn" size="small" onClick={closeAddTask}>
               <CloseIcon />

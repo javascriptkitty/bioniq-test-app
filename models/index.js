@@ -5,11 +5,10 @@ const TaskSchema = new Schema({
   name: {
     type: String,
     required: "Title is Required",
+    unique: true,
   },
-  description: {
-    type: String,
-    required: "Description is Required",
-  },
+  description: String,
+
   priority: {
     type: Number,
     required: "Set a priority",

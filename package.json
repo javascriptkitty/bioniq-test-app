@@ -25,7 +25,7 @@
     "if-env": "^1.0.4",
     "mongoose": "^5.3.16",
     "node-sass": "^4.14.1",
-    "socket.io": "^2.3.0",
-    "ws": "^7.3.1"
+    "react-toastify": "^6.0.8",
+    "socket.io": "^2.3.0"
   }
 }

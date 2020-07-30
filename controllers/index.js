@@ -9,14 +9,7 @@ module.exports = {
       })
       .catch((err) => res.status(422).json(err));
   },
-  findById: function (req, res) {
-    Task.findOne({ _id: req.params.id })
-      .then((dbModel) => {
-        res.json(dbModel);
-      })
-      .catch((err) => res.status(422).json(err));
-  },
-  //TODO
+
   create: function (req, res) {
     Task.create(req.body)
       .then((dbModel) => {
@@ -25,21 +18,30 @@ module.exports = {
       })
       .catch((err) => res.status(422).json(err));
   },
-  //TODO
+
   bulkDelete: function (req, res) {
-    const { priority, op } = req.params;
-    const filter = { priority: { $gte: priority } };
+    const { priority, op } = req.query;
+
+    let filter;
+    if (priority) {
+      let param =
+        op === "gt" ? { $gt: parseInt(priority) } : { $lt: parseInt(priority) };
+
+      filter = { priority: param };
+    } else {
+      filter = { name: { $eq: req.query.name } };
+    }
+
     Task.deleteMany(filter)
       .then((result) => {
-        res.json({ ...req.params });
+        res.json(result);
       })
       .catch((err) => res.status(422).json(err));
   },
 
   remove: function (req, res) {
-    console.log(req.params);
-    Task.deleteOne(req.params.id)
-      //.then((dbModel) => dbModel.remove())
+    Task.findOne({ _id: req.params.id })
+      .then((dbModel) => dbModel.remove())
       .then((result) => {
         res.json(result);
       })

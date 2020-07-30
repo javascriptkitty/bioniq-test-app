@@ -38,6 +38,7 @@ export default function DeleteTask(props) {
     param = param !== "byName" ? param : paramName;
 
     props.deleteSelected(param);
+    props.closeAddTask();
   };
 
   const isDisabled =
@@ -49,13 +50,16 @@ export default function DeleteTask(props) {
         <FormGroup>
           {renderBoxes(lessThan, "lessThan", "приоритет < 5", handleChange)}
           {renderBoxes(moreThan, "moreThan", "приоритет > 5", handleChange)}
-          {renderBoxes(byName, "byName", "по названию:", handleChange)}
+          <div className="deleteByName">
+            {renderBoxes(byName, "byName", "по названию:", handleChange)}
 
-          <TextField onChange={handleInputChange} />
+            <TextField onChange={handleInputChange} />
+          </div>
         </FormGroup>
       </FormControl>
       <Button
         color="secondary"
+        className="deleteBtn"
         variant="contained"
         onClick={deleteSelected}
         disabled={isDisabled}

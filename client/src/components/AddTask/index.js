@@ -28,16 +28,17 @@ export default function AddTask(props) {
   const [newTask, setNewTask] = React.useState({ ...emptyTask });
 
   const handleChange = (key, event) => {
-    // if (key == "priority" && event.target.value.length > 1) {
-    //   return;
-    // }
+    if (key === "priority" && event.target.value.length > 1) {
+      return;
+    }
     const value = { ...newTask };
-    value[key] = event.target.value;
+    value[key] = event.target.value.trim();
     setNewTask(value);
   };
 
   const saveTask = () => {
     props.createTask(newTask);
+    props.closeAddTask();
   };
 
   return (
