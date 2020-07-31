@@ -32,7 +32,7 @@ export default function AddTask(props) {
       return;
     }
     const value = { ...newTask };
-    value[key] = event.target.value.trim();
+    value[key] = event.target.value;
     setNewTask(value);
   };
 

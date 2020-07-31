@@ -11,6 +11,8 @@ import {
   TableSortLabel,
   makeStyles,
   TableContainer,
+  TablePagination,
+  TableFooter,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import TableSearch from "../TableSearch";
@@ -20,7 +22,7 @@ export const headCells = [
   { id: "_id", label: "" },
   { id: "name", label: "Название" },
   { id: "description", label: "Описание" },
-  { id: "priority", numeric: true, label: "Приоретет" },
+  { id: "priority", numeric: true, label: "Приоритет" },
 ];
 function MaterialTableHead(props) {
   const { classes, order, orderBy, onRequestSort } = props;
@@ -118,6 +120,29 @@ export default function MaterialTable(props) {
   const classes = useStyles();
   const [order, setOrder] = React.useState("desc");
   const [orderBy, setOrderBy] = React.useState("perc");
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(0);
+
+  const [windowHeight, setWindowHeight] = React.useState({
+    height: undefined,
+  });
+
+  React.useEffect(() => {
+    // Handler to call on window resize
+    function handleResize() {
+      setWindowHeight({
+        height: window.innerHeight,
+      });
+      const number = Math.floor((window.innerHeight - 240) / 70);
+      setRowsPerPage(number);
+    }
+    // Add event listener
+    window.addEventListener("resize", handleResize);
+    // Call handler right away so state gets updated with initial window size
+    handleResize();
+    // Remove event listener on cleanup
+    return () => window.removeEventListener("resize", handleResize);
+  }, []); // Empty array ensures that effect is only run on mount
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -125,7 +150,14 @@ export default function MaterialTable(props) {
     setOrderBy(property);
   };
 
-  const sortedRows = stableSort(rows, getComparator(order, orderBy));
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const sortedRows = stableSort(rows, getComparator(order, orderBy)).slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   return (
     <Paper className={classes.root}>
@@ -140,10 +172,21 @@ export default function MaterialTable(props) {
             onRequestSort={handleRequestSort}
           />
           <TableBody>
-            {sortedRows.map((row) => {
+            {(rowsPerPage > 0 ? sortedRows : rows).map((row) => {
               return renderTableRow(row, props.deleteTask);
             })}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TablePagination
+                rowsPerPageOptions={[]}
+                count={rows.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onChangePage={handleChangePage}
+              />
+            </TableRow>
+          </TableFooter>
         </Table>
       </TableContainer>
     </Paper>

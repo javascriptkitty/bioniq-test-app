@@ -46,8 +46,10 @@
   .name {
     min-width: 180px;
   }
+
   .priority {
-    max-width: 80px;
+    min-width: 70px;
+    width: 70px;
   }
   .description {
     width: 100%;
@@ -65,4 +67,8 @@
   display: flex;
   justify-content: flex-end;
   margin-right: 20px;
+}
+
+.MuiTableCell-body {
+  padding: 10px 16px !important;
 }
