@@ -26,6 +26,6 @@
     "mongoose": "^5.3.16",
     "node-sass": "^4.14.1",
     "react-toastify": "^6.0.8",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   }
 }
